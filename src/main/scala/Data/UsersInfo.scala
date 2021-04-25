@@ -4,11 +4,26 @@ import scala.collection.mutable
 
 object UsersInfo {
 
+  private val DEFAULT_ACCOUNT_VALUE = 30
+
   // Will contain the name of the currently active user; default value is null.
   private var _activeUser: String = _
 
   // TODO: step 2 - create an attribute that will contain each user and its current balance.
-  private var accounts = ???
+  private var accounts = mutable.Map[String, Double]()
+
+  def getAccountValue(user: String): Double = accounts(user)
+
+  private def createUser(username: String): Unit = {
+    accounts(username) = DEFAULT_ACCOUNT_VALUE
+  }
+
+  def logIn(user: String): Unit = {
+    if(!accounts.contains(user)){
+      createUser(user)
+    }
+    _activeUser = user
+  }
 
   /**
     * Update an account by decreasing its balance.
@@ -17,5 +32,8 @@ object UsersInfo {
     * @return the new balance
     */
   // TODO: step 2
-  def purchase(user: String, amount: Double): Double = ???
+  def purchase(user: String, amount: Double): Double = {
+    accounts(user) -= amount
+    accounts(user)
+  }
 }
