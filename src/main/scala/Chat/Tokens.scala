@@ -24,4 +24,19 @@ object Tokens {
   // State of mind
   val ASSOIFFE : Token   = 12
   val AFFAME : Token     = 13
+
+  val APPELER: Token      = 14
+  val CONNAITRE: Token      = 15
+  val MOI: Token      = 16
+  val SOLDE: Token      = 17
+  val MARQUE: Token      = 18
+  val MAISON: Token      = 19
+  val COMMANDER: Token = 20
+  val COMBIEN: Token = 21
+  val COUTER: Token = 22
+  val QUOI: Token = 23
+  val USELESS: Token = 24
+
+
+
 }

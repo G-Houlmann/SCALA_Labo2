@@ -1,5 +1,6 @@
 *.class
 *.log
-*.bsp/
+.bsp/
 target/
-.idea/*
+.vscode
+.idea
