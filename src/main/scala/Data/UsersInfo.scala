@@ -10,9 +10,11 @@ object UsersInfo {
   private var _activeUser: String = _
 
   // TODO: step 2 - create an attribute that will contain each user and its current balance.
-  private var accounts = mutable.Map[String, Double]()
+  private val accounts = mutable.Map[String, Double]()
 
   def getAccountValue(user: String): Double = accounts(user)
+
+  def getAccountValue(): Double = getAccountValue(_activeUser)
 
   private def createUser(username: String): Unit = {
     accounts(username) = DEFAULT_ACCOUNT_VALUE
@@ -25,6 +27,8 @@ object UsersInfo {
     _activeUser = user
   }
 
+  def isAuthenticate: Boolean = _activeUser == null
+
   /**
     * Update an account by decreasing its balance.
     * @param user the user whose account will be updated
@@ -35,5 +39,9 @@ object UsersInfo {
   def purchase(user: String, amount: Double): Double = {
     accounts(user) -= amount
     accounts(user)
+  }
+
+  def purchase(amount: Double): Double = {
+    purchase(_activeUser, amount)
   }
 }
