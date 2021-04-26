@@ -45,7 +45,7 @@ class Parser(tokenizer: Tokenizer) {
         } else expected(COMMANDER, CONNAITRE)
       } else if (curToken == MOI) {
         eat(APPELER)
-        Identification(curValue)
+        Identification(stripName(curValue))
       } else {
         eat(ETRE)
         if (curToken == AFFAME) {
@@ -53,7 +53,7 @@ class Parser(tokenizer: Tokenizer) {
         } else if (curToken == ASSOIFFE) {
           Thirsty()
         } else if (curToken == PSEUDO) {
-          Identification(curValue)
+          Identification(stripName(curValue))
         } else {
           expected(AFFAME, ASSOIFFE, PSEUDO)
         }
@@ -62,6 +62,11 @@ class Parser(tokenizer: Tokenizer) {
     else {
       parsePrice()
     }
+  }
+
+  /** Remove underscore before username */
+  private def stripName(name: String): String = {
+    name.replace("_", "")
   }
 
   /** Parse the balance request */
