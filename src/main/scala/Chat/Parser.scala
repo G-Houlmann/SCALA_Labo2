@@ -64,12 +64,14 @@ class Parser(tokenizer: Tokenizer) {
     }
   }
 
+  /** Parse the balance request */
   private def parseBalance() : ExprTree = {
     eat(MOI)
     eat(SOLDE)
     Balance()
   }
 
+  /** Parse a price request */
   private def parsePrice() : ExprTree = {
     if (curToken == COMBIEN) {
       readToken()
@@ -85,9 +87,12 @@ class Parser(tokenizer: Tokenizer) {
     Price(parseItems())
   }
 
+  /** Parse items in a command/price request */
   private def parseItems(): ExprTree = {
     val item = parseProduct()
 
+    // Use this little trick to build the tree from
+    // the bottom and gain left precedence
     def loop(rexp: ExprTree): ExprTree = {
       if (curToken == ET) {
         readToken()
@@ -103,6 +108,7 @@ class Parser(tokenizer: Tokenizer) {
     loop(item)
   }
 
+  /** Parse an independent item */
   private def parseProduct(): ExprTree = {
     var product: Products.Product = 0
     var quantity = 0

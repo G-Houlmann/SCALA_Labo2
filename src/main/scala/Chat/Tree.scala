@@ -26,6 +26,11 @@ object Tree {
       case _ => 0
     }
 
+    /**
+      * Middleware-like function to provide authentication based on
+      * the whitelist principle
+      * @return true if the user can use the command else false
+      */
     private def authenticationMiddleware: Boolean = this match {
       case Thirsty()
         | Hungry()
@@ -35,6 +40,7 @@ object Tree {
       case _ => isAuthenticate
     }
 
+    /** helper for the complex Command node used in reply function */
     private def replyCommand(command: Command): String = {
       def loop(node: ExprTree): String = node match {
         case DefaultItem(product, quantity) => s"${quantity} ${asString(product)}"
