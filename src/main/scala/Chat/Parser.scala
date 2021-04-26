@@ -2,6 +2,7 @@ package Chat
 
 import Chat.Tokens._
 import Tree._
+import Data.Products
 
 class UnexpectedTokenException(msg: String) extends Exception(msg){}
 
@@ -33,18 +34,99 @@ class Parser(tokenizer: Tokenizer) {
     if (curToken == BONJOUR) readToken()
     if (curToken == JE) {
       readToken()
-      eat(ETRE)
-      if (curToken == ASSOIFFE) { 
+      if (curToken == VOULOIR) {
         readToken()
-        Thirsty()
+        if (curToken == COMMANDER) {
+          readToken()
+          Command(parseItems())
+        } else if (curToken == CONNAITRE) {
+          readToken()
+          parseBalance()
+        } else expected(COMMANDER, CONNAITRE)
+      } else if (curToken == MOI) {
+        eat(APPELER)
+        Identification(curValue)
+      } else {
+        eat(ETRE)
+        if (curToken == AFFAME) {
+          Hungry()
+        } else if (curToken == ASSOIFFE) {
+          Thirsty()
+        } else if (curToken == PSEUDO) {
+          Identification(curValue)
+        } else {
+          expected(AFFAME, ASSOIFFE, PSEUDO)
+        }
       }
-      else if (curToken == AFFAME) {
-        readToken()
-        Hungry()
-      }
-      else expected(ASSOIFFE, AFFAME)
     }
-    else expected(BONJOUR, JE)
+    else {
+      parsePrice()
+    }
+  }
+
+  private def parseBalance() : ExprTree = {
+    eat(MOI)
+    eat(SOLDE)
+    Balance()
+  }
+
+  private def parsePrice() : ExprTree = {
+    if (curToken == COMBIEN) {
+      readToken()
+      eat(COUTER)
+    }else if (curToken == QUEL) {
+      readToken()
+      eat(ETRE)
+      eat(USELESS)
+      eat(PRIX)
+      eat(USELESS)
+    } else expected(COMBIEN, QUEL)
+
+    Price(parseItems())
+  }
+
+  private def parseItems(): ExprTree = {
+    val item = parseProduct()
+
+    def loop(rexp: ExprTree): ExprTree = {
+      if (curToken == ET) {
+        readToken()
+        loop(And(parseProduct(), rexp))
+      } else if (curToken == OU) {
+        readToken()
+        loop(Or(parseProduct(),rexp))
+      } else {
+        rexp
+      }
+    }
+
+    loop(item)
+  }
+
+  private def parseProduct(): ExprTree = {
+    var product: Products.Product = 0
+    var quantity = 0
+
+    if (curToken == NUM) {
+      quantity = Integer.parseInt(curValue)
+      readToken()
+    } else expected(NUM)
+
+    if (curToken == CROISSANT) {
+      product = Products.CROISSANT
+      readToken()
+    } else if (curToken == BIERE) {
+      product = Products.BEER
+      readToken()
+    } else expected(CROISSANT, BIERE)
+
+    if (curToken == MARQUE) {
+      val brand = curValue
+      readToken()
+      Item(product, brand, quantity)
+    } else {
+      DefaultItem(product, quantity)
+    }
   }
 
   // Start the process by reading the first token.

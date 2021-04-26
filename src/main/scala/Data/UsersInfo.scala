@@ -7,7 +7,7 @@ object UsersInfo {
   private val DEFAULT_ACCOUNT_VALUE = 30
 
   // Will contain the name of the currently active user; default value is null.
-  private var _activeUser: String = _
+  private var _activeUser: String = null
 
   // TODO: step 2 - create an attribute that will contain each user and its current balance.
   private val accounts = mutable.Map[String, Double]()
@@ -27,7 +27,7 @@ object UsersInfo {
     _activeUser = user
   }
 
-  def isAuthenticate: Boolean = _activeUser == null
+  def isAuthenticate: Boolean = _activeUser != null
 
   /**
     * Update an account by decreasing its balance.

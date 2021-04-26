@@ -34,8 +34,7 @@ object Tokens {
   val COMBIEN: Token = 21
   val COUTER: Token = 22
   val QUEL: Token = 23
-  val USELESS: Token = 24
-
-
+  val PRIX: Token = 24
+  val USELESS: Token = 25
 
 }
